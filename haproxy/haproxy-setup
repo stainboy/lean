@@ -1,0 +1,61 @@
+docker run -it --rm --name haproxy -p 3306:3306 -p 3307:3307 -p 9000:9000 haproxy:1.5.14
+
+
+groupadd -r haproxy && useradd -r -g haproxy haproxy
+
+
+---
+mkdir -p /etc/haproxy
+cat > /etc/haproxy/haproxy.cfg << EOF
+global
+    log         127.0.0.1   local0
+    log         127.0.0.1   local1 notice
+    maxconn     4096
+    user        haproxy
+    group       haproxy
+    nbproc      1
+    pidfile     /var/run/haproxy.pid
+
+defaults
+    log         global
+    option      tcplog
+    option      dontlognull
+    retries     3
+    maxconn     4096
+    option      redispatch
+    timeout     connect 50000ms
+    timeout     client  50000ms
+    timeout     server  50000ms
+
+listen mariadb-galera-writes
+    bind 0.0.0.0:3307
+    mode tcp
+    option mysql-check user haproxy
+    server db1 10.58.113.51:3306 check
+    server db2 10.58.113.53:3306 check backup
+    server db3 10.58.113.68:3306 check backup
+
+listen mariadb-galera-reads
+    bind 0.0.0.0:3306
+    mode tcp
+    balance leastconn
+    option mysql-check user haproxy
+    server db1 10.58.113.51:3306 check
+    server db2 10.58.113.53:3306 check
+    server db3 10.58.113.68:3306 check
+
+# HAProxy web ui
+listen stats 0.0.0.0:9000
+    mode http
+    stats enable
+    stats uri /
+    stats realm HAProxy\ Statistics
+    stats auth haproxy:12345
+    stats admin if TRUE
+EOF
+
+#
+haproxy -f /etc/haproxy/haproxy.cfg &
+
+# test
+mysql -h 10.58.116.94 --protocol=TCP -u root -p 12345 -P 3306

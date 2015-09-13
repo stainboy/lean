@@ -1,0 +1,62 @@
+docker run --privileged --rm --name mysql -it -p 3306:3306 -p 4567:4567 -p 4568:4568 -p 4444:4444 2fbc5d7e99a2
+
+#0
+vi /usr/bin/wsrep_sst_rsync
+	check_pid_and_port()
+	[ $(netstat -ano | grep LISTEN | grep $rsync_port | wc -l) -ge 1 ]
+
+#1
+chown -R mysql:mysql /var/lib/mysql
+mysql_install_db --user=mysql --datadir=/var/lib/mysql --rpm
+mysqld --user=mysql --datadir=/var/lib/mysql --skip-networking &
+
+#2
+mysql --protocol=socket -uroot
+
+	DELETE FROM mysql.user ;
+	GRANT ALL ON *.* TO 'root'@'%' IDENTIFIED BY '12345';
+	GRANT USAGE ON *.* to sst_user@'%' IDENTIFIED BY '54321';
+	CREATE USER 'haproxy'@'%';
+	GRANT ALL PRIVILEGES on *.* to sst_user@'%';
+	FLUSH PRIVILEGES;
+	DROP DATABASE IF EXISTS test ;
+	SELECT User FROM mysql.user;
+	quit
+
+
+#3
+ps aux|grep mysqld|awk '{print $2}'|xargs kill
+
+#4
+cat > /etc/mysql/conf.d/galera.cnf << EOF
+[mysqld]
+binlog_format=ROW
+innodb_autoinc_lock_mode=2
+
+wsrep_provider=/usr/lib/galera/libgalera_smm.so
+wsrep_cluster_address="gcomm://10.58.113.51,10.58.113.53,10.58.113.68"
+wsrep_cluster_name='galera_cluster'
+wsrep_node_address='10.58.113.68'
+wsrep_node_name='db3'
+wsrep_sst_method=rsync
+wsrep_sst_auth=sst_user:54321
+EOF
+
+
+#5
+master -> mysqld --wsrep-new-cluster
+slave -> mysqld
+
+
+#6
+mysql -u root -p -e "show status like 'wsrep%'"
+mysql -u root -p
+
+CREATE DATABASE clustertest;
+CREATE TABLE clustertest.mycluster ( id INT NOT NULL AUTO_INCREMENT, name VARCHAR(50), ipaddress VARCHAR(20), PRIMARY KEY(id));
+INSERT INTO clustertest.mycluster (name, ipaddress) VALUES ("db1", "xx2211");
+create user miles;
+
+SELECT User FROM mysql.user;
+select * from clustertest.mycluster;
+
