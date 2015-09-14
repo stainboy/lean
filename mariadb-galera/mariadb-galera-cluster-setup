@@ -14,15 +14,14 @@ mysqld --user=mysql --datadir=/var/lib/mysql --skip-networking &
 mysql --protocol=socket -uroot
 
 	DELETE FROM mysql.user ;
-	GRANT ALL ON *.* TO 'root'@'%' IDENTIFIED BY '12345';
-	GRANT USAGE ON *.* to sst_user@'%' IDENTIFIED BY '54321';
+	GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY '12345' WITH GRANT OPTION;
+	GRANT ALL PRIVILEGES ON *.* TO 'sst_user'@'%' IDENTIFIED BY '54321' WITH GRANT OPTION;
 	CREATE USER 'haproxy'@'%';
 	GRANT ALL PRIVILEGES on *.* to sst_user@'%';
 	FLUSH PRIVILEGES;
 	DROP DATABASE IF EXISTS test ;
 	SELECT User FROM mysql.user;
 	quit
-
 
 #3
 ps aux|grep mysqld|awk '{print $2}'|xargs kill
@@ -60,3 +59,4 @@ create user miles;
 SELECT User FROM mysql.user;
 select * from clustertest.mycluster;
 
+mysql -h 10.58.9.246 --protocol=TCP -u root -P 3306 -p

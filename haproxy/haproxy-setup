@@ -1,7 +1,9 @@
-docker run -it --rm --name haproxy -p 3306:3306 -p 3307:3307 -p 9000:9000 haproxy:1.5.14
+docker run -it --rm --name haproxy \
+ -p 3306:3306 -p 3307:3307 -p 5672:5672 -p 15672:15672 -p 9000:9000 \
+ haproxy:1.5.14
 
 
-groupadd -r haproxy && useradd -r -g haproxy haproxy
+#groupadd -r haproxy && useradd -r -g haproxy haproxy
 
 
 ---
@@ -43,6 +45,21 @@ listen mariadb-galera-reads
     server db1 10.58.113.51:3306 check
     server db2 10.58.113.53:3306 check
     server db3 10.58.113.68:3306 check
+
+listen rabbitmq
+    bind 0.0.0.0:5672
+    mode tcp
+    balance roundrobin
+    server mq1 10.58.113.51:5672 check inter 2000 rise 2 fall 3
+    server mq2 10.58.113.53:5672 check inter 2000 rise 2 fall 3
+    server mq3 10.58.113.68:5672 check inter 2000 rise 2 fall 3
+
+listen rabbitmq-management
+    bind 0.0.0.0:15672
+    mode http
+    server mq1 10.58.113.51:15672 check
+    server mq2 10.58.113.53:15672 check backup
+    server mq3 10.58.113.68:15672 check backup
 
 # HAProxy web ui
 listen stats 0.0.0.0:9000
