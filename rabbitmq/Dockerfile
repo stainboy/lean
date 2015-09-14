@@ -26,7 +26,7 @@ RUN \
     apt-get clean autoclean &&\
     rm -rf /var/lib/apt/lists/* &&\
     rm -rf /var/log/* &&\
-    # configure mariadb and galera
+    # configure rabbitmq
     ln -sf /var/lib/rabbitmq/.erlang.cookie /root/ &&\
     echo '[{rabbit, [{loopback_users, []}]}].' > /etc/rabbitmq/rabbitmq.config &&\
     curl -o /usr/lib/rabbitmq/lib/rabbitmq_server-3.5.4/plugins/rabbitmq_delayed_message_exchange-0.0.1-rmq3.5.x.ez http://10.58.136.166/mc/rabbitmq_delayed_message_exchange-0.0.1-rmq3.5.x.ez &&\
