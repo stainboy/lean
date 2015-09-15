@@ -6,7 +6,7 @@ FROM debian:jessie
 #  mariadb-galera:10.0.21
 
 ADD src/start-mariadb.sh /usr/bin/
-ADD src/bin/wsrep_sst_rsync /usr/bin/
+ADD src/bin/wsrep_sst_rsync /usr/bin/wsrep_sst_rsync.tmp
 ADD src/conf/galera.cnf.tpl /etc/mysql/conf.d/
 
 RUN \
@@ -40,6 +40,7 @@ RUN \
     echo 'skip-host-cache\nskip-name-resolve' | awk '{ print } $1 == "[mysqld]" && c == 0 { c = 1; system("cat") }' /etc/mysql/my.cnf > /tmp/my.cnf &&\
     mv /tmp/my.cnf /etc/mysql/my.cnf &&\
     # executable
+    mv /usr/bin/wsrep_sst_rsync.tmp /usr/bin/wsrep_sst_rsync &&\
     chmod +x /usr/bin/start-mariadb.sh /usr/bin/wsrep_sst_rsync  &&\
     # done
     echo 'done'
