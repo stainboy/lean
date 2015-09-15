@@ -53,7 +53,7 @@ Logon node3, then type the command to start the third node
 Start mysql client, input password 12345
 
     docker run -it --rm --name mariadb-client \
-     --entrypoint /bin/bash
+     --entrypoint /bin/bash \
      mariadb-galera:10.0.21
 
     mysql -h 10.58.9.243 --protocol=TCP -u root -P 3306 -p

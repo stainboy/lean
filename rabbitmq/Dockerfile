@@ -43,6 +43,8 @@ RUN \
     echo '[rabbitmq_delayed_message_exchange,rabbitmq_management].' > /etc/rabbitmq/enabled_plugins &&\
     # clean
     rm -rf /var/lib/rabbitmq/* &&\
+    # executable
+    chmod +x /usr/bin/start-mq.sh  &&\
     # done
     echo 'done'
 
