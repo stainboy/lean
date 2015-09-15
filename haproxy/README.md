@@ -98,7 +98,7 @@ Start mysql client, input password 12345
      --entrypoint /bin/bash
      mariadb-galera:10.0.21
 
-     mysql -h 10.58.9.246 --protocol=TCP -u root -P 3306 -p
+    mysql -h 10.58.9.246 --protocol=TCP -u root -P 3306 -p
 
 Show cluster status
 

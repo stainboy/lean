@@ -28,10 +28,10 @@ Logon node2, then type the command to start the second node. (Again, replace the
      docker run -d --name rabbitmq \
       -h `hostname` \
       -e RABBITMQ_ERLANG_COOKIE='WWKXRWTRHFEWASAPGJCZ'\
+      -e RABBITMQ_CLUSTER_PEER=cnvmtest1 \
       -p 5672:5672 -p 4369:4369 -p 15672:15672 -p 25672:25672 \
-      -e MQ_CLUSTER_PEER=cnvmtest1 \
       rabbitmq:3.5.14
-Where *MQ\_CLUSTER\_PEER* equals to master node hostname, which is *cnvmtest1* in this case.
+Where *RABBITMQ\_CLUSTER\_PEER* equals to master node hostname, which is *cnvmtest1* in this case.
 
 ## 5. Start node3 ##
 Logon node3, then type the command to start the third node
@@ -39,10 +39,10 @@ Logon node3, then type the command to start the third node
      docker run -d --name rabbitmq \
       -h `hostname` \
       -e RABBITMQ_ERLANG_COOKIE='WWKXRWTRHFEWASAPGJCZ'\
+      -e RABBITMQ_CLUSTER_PEER=cnvmtest1 \
       -p 5672:5672 -p 4369:4369 -p 15672:15672 -p 25672:25672 \
-      -e MQ_CLUSTER_PEER=cnvmtest1 \
       rabbitmq:3.5.14
-Where *MQ\_CLUSTER\_PEER* equals to master node hostname, which is *cnvmtest1* in this case.
+Where *RABBITMQ\_CLUSTER\_PEER* equals to master node hostname, which is *cnvmtest1* in this case.
 
 ## 6. Test cluster ##
 Open browser, input http://10.58.9.243:15672, login as the admin user and check the status.
@@ -58,10 +58,10 @@ Then go to the dead node, type the command to restart MQ and rejoin the cluster.
      docker run -d --name rabbitmq \
       -h `hostname` \
       -e RABBITMQ_ERLANG_COOKIE='WWKXRWTRHFEWASAPGJCZ'\
+      -e RABBITMQ_CLUSTER_PEER=cnvmtest2 \
       -p 5672:5672 -p 4369:4369 -p 15672:15672 -p 25672:25672 \
-      -e MQ_CLUSTER_PEER=cnvmtest2 \
       rabbitmq:3.5.14
-Where *MQ\_CLUSTER\_PEER* equals to any of the live node hostname, which is *cnvmtest2* in this case. (Because cnvmtest1 is dead)
+Where *RABBITMQ\_CLUSTER\_PEER* equals to any of the live node hostname, which is *cnvmtest2* in this case. (Because cnvmtest1 is dead)
 
 ## 8. When the entire cluster dead ##
 We don't persist MQ data, so start the entire cluster as the new one by redo the step #3,4,5.
