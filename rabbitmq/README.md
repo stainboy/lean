@@ -8,7 +8,7 @@
 - node3 (e.g. 10.58.9.245, cnvmtest3) 
 
 ## 2. Build the solution ##
-    docker build --no-cache=true -t rabbitmq:3.5.14
+    docker build --no-cache=true -t rabbitmq:3.5.4
 
 ## 3. Start node1 (aks master) ##
 Logon node1, then type the command to start the first node. (Replace the IP address with your own)
@@ -18,7 +18,7 @@ Logon node1, then type the command to start the first node. (Replace the IP addr
       -e RABBITMQ_ERLANG_COOKIE='WWKXRWTRHFEWASAPGJCZ'\
       -e RABBITMQ_ADMIN='admin:12345'\
       -p 5672:5672 -p 4369:4369 -p 15672:15672 -p 25672:25672 \
-      rabbitmq:3.5.14
+      rabbitmq:3.5.4
 Where *RABBITMQ\_ERLANG\_COOKIE* could be anything, just make sure all the nodes use the same value.
 Where *RABBITMQ\_ADMIN* represents the admin user and password that you want to create.
 
@@ -30,7 +30,7 @@ Logon node2, then type the command to start the second node. (Again, replace the
       -e RABBITMQ_ERLANG_COOKIE='WWKXRWTRHFEWASAPGJCZ'\
       -e RABBITMQ_CLUSTER_PEER=cnvmtest1 \
       -p 5672:5672 -p 4369:4369 -p 15672:15672 -p 25672:25672 \
-      rabbitmq:3.5.14
+      rabbitmq:3.5.4
 Where *RABBITMQ\_CLUSTER\_PEER* equals to master node hostname, which is *cnvmtest1* in this case.
 
 ## 5. Start node3 ##
@@ -41,7 +41,7 @@ Logon node3, then type the command to start the third node
       -e RABBITMQ_ERLANG_COOKIE='WWKXRWTRHFEWASAPGJCZ'\
       -e RABBITMQ_CLUSTER_PEER=cnvmtest1 \
       -p 5672:5672 -p 4369:4369 -p 15672:15672 -p 25672:25672 \
-      rabbitmq:3.5.14
+      rabbitmq:3.5.4
 Where *RABBITMQ\_CLUSTER\_PEER* equals to master node hostname, which is *cnvmtest1* in this case.
 
 ## 6. Test cluster ##
@@ -60,7 +60,7 @@ Then go to the dead node, type the command to restart MQ and rejoin the cluster.
       -e RABBITMQ_ERLANG_COOKIE='WWKXRWTRHFEWASAPGJCZ'\
       -e RABBITMQ_CLUSTER_PEER=cnvmtest2 \
       -p 5672:5672 -p 4369:4369 -p 15672:15672 -p 25672:25672 \
-      rabbitmq:3.5.14
+      rabbitmq:3.5.4
 Where *RABBITMQ\_CLUSTER\_PEER* equals to any of the live node hostname, which is *cnvmtest2* in this case. (Because cnvmtest1 is dead)
 
 ## 8. When the entire cluster dead ##

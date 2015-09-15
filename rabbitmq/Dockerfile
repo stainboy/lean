@@ -1,5 +1,5 @@
 FROM debian:jessie
-# docker build --no-cache=true -t rabbitmq .
+# docker build --no-cache=true -t rabbitmq:3.5.4 .
 #
 
 ADD src/start-mq.sh /usr/bin/
@@ -13,6 +13,11 @@ RUN \
     # http proxy
     export http_proxy=http://proxy.pvgl.sap.corp:8080 &&\
     export https_proxy=http://proxy.pvgl.sap.corp:8080 &&\
+    export DEBIAN_FRONTEND=noninteractive &&\
+    # erlang-key
+    apt-key adv --keyserver ha.pool.sks-keyservers.net --recv-keys 434975BD900CCBE4F7EE1B1ED208507CA14F4FCA &&\
+    # rabbitmq-key
+    apt-key adv --keyserver ha.pool.sks-keyservers.net --recv-keys F78372A06FF50C80464FC1B4F7B8CEA6056E8E56 &&\
     # install rabbitmq
     { \
         echo 'deb http://mirrors.163.com/debian/ jessie main non-free contrib'; \
@@ -37,7 +42,6 @@ RUN \
     # rabbitmq-plugins enable rabbitmq_delayed_message_exchange &&\
     echo '[rabbitmq_delayed_message_exchange,rabbitmq_management].' > /etc/rabbitmq/enabled_plugins &&\
     # clean
-    ps aux|grep rabbitmq-server|awk '{print $2}'|xargs kill -9 &&\
     rm -rf /var/lib/rabbitmq/* &&\
     # done
     echo 'done'

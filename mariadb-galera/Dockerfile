@@ -6,8 +6,6 @@ FROM debian:jessie
 #  -p 3306:3306 -p 4567:4567 -p 4568:4568 -p 4444:4444 \
 #  mariadb-galera:mc
 
-ADD src/start-mariadb.sh /usr/bin/
-
 RUN \
     # mysql user and group
     groupadd -r mysql && useradd -r -g mysql mysql &&\
@@ -39,6 +37,9 @@ RUN \
     mv /tmp/my.cnf /etc/mysql/my.cnf
     # done
     echo 'done'
+
+ADD src/start-mariadb.sh /usr/bin/
+ADD src/bin/wsrep_sst_rsync /usr/bin/
 
 # VOLUME /var/lib/mysql
 
