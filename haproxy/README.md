@@ -80,7 +80,7 @@ Go to node4, prepare haproxy.cfg manually. You can edit the file based on src/_h
     EOF
 
 ## 3. Start haproxy ##
-Type the command to start the second node.
+Type the command to start haproxy.
 
     docker run -d --name haproxy \
      -p 3306:3306 -p 3307:3307 -p 5672:5672 -p 15672:15672 -p 9000:9000 \
