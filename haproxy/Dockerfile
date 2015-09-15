@@ -26,5 +26,8 @@ RUN \
     # done
     echo 'done'
 
+# VOLUME /etc/haproxy/haproxy.cfg
 
-# EXPOSE 3306 3307 9000
+# EXPOSE 3306 3307 5672 15672 9000
+
+ENTRYPOINT ["haproxy", "-f", "/etc/haproxy/haproxy.cfg"]

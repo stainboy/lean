@@ -2,6 +2,9 @@ FROM debian:jessie
 # docker build --no-cache=true -t rabbitmq .
 #
 
+ADD src/start-mq.sh /usr/bin/
+ADD src/plugins/rabbitmq_delayed_message_exchange-0.0.1-rmq3.5.x.ez /usr/lib/rabbitmq/lib/rabbitmq_server-3.5.4/plugins/
+
 ENV PATH=/usr/lib/rabbitmq/bin:$PATH
 
 RUN \
@@ -29,8 +32,6 @@ RUN \
     # configure rabbitmq
     ln -sf /var/lib/rabbitmq/.erlang.cookie /root/ &&\
     echo '[{rabbit, [{loopback_users, []}]}].' > /etc/rabbitmq/rabbitmq.config &&\
-    curl -o /usr/lib/rabbitmq/lib/rabbitmq_server-3.5.4/plugins/rabbitmq_delayed_message_exchange-0.0.1-rmq3.5.x.ez http://10.58.136.166/mc/rabbitmq_delayed_message_exchange-0.0.1-rmq3.5.x.ez &&\
-    curl -o /usr/bin/start-mq.sh http://10.58.136.166/mc/start-mq.sh &&\
     # enable plugins
     # rabbitmq-plugins enable rabbitmq_management &&\
     # rabbitmq-plugins enable rabbitmq_delayed_message_exchange &&\

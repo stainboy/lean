@@ -6,6 +6,8 @@ FROM debian:jessie
 #  -p 3306:3306 -p 4567:4567 -p 4568:4568 -p 4444:4444 \
 #  mariadb-galera:mc
 
+ADD src/start-mariadb.sh /usr/bin/
+
 RUN \
     # mysql user and group
     groupadd -r mysql && useradd -r -g mysql mysql &&\
@@ -28,7 +30,7 @@ RUN \
     apt-get clean autoclean &&\
     rm -rf /var/lib/apt/lists/* &&\
     # stop mysql
-    service mysql stop &&\
+    ps aux|grep mysqld|awk '{print $2}'|xargs kill -9 &&\
     rm -rf /var/log/* &&\
     # configure mariadb and galera
     rm -rf /var/lib/mysql && mkdir -p /var/lib/mysql &&\
@@ -38,5 +40,8 @@ RUN \
     # done
     echo 'done'
 
+# VOLUME /var/lib/mysql
 
 # EXPOSE 3306 4567 4568 4444
+
+ENTRYPOINT ["/usr/bin/start-mariadb.sh"]
