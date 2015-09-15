@@ -47,7 +47,7 @@ master -> mysqld --wsrep-new-cluster
 slave -> mysqld
 
 
-#6
+#6 -- test
 mysql -u root -p -e "show status like 'wsrep%'"
 mysql -u root -p
 
@@ -60,3 +60,7 @@ SELECT User FROM mysql.user;
 select * from clustertest.mycluster;
 
 mysql -h 10.58.9.246 --protocol=TCP -u root -P 3306 -p
+
+create user miles;
+create schema milescc;
+grant all on milescc.* to 'miles'@'%';
