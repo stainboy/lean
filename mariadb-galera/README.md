@@ -23,7 +23,24 @@ Logon node1, then type the command to start the first node. (Replace the IP addr
      -e MYSQL_CLUSTER=new \
      mariadb-galera:10.0.21
 
+Wait couple seconds until the server is up. Type the command to check the server startup status
+
+    docker run --rm --name mariadb-client \
+     --entrypoint /bin/bash \
+     mariadb-galera:10.0.21 \
+     -c "mysql -h 10.58.9.243 --protocol=TCP -u root -P 3306 -p'12345' -e \"show status like 'wsrep_%'\""
+
+A successful result could contains the following entries. (Only part of the entries are listed here) 
+
+    wsrep_local_state_comment       Synced
+    wsrep_incoming_addresses        10.58.9.243:3306
+    wsrep_cluster_size              1
+    wsrep_ready                     ON
+
+
 ## 4. Start node2 ##
+**Do not start node2 until you see a successful result from node1.**
+
 Logon node2, then type the command to start the second node. (Again, replace the IP address with your own)
 
     docker run -d --name mariadb \
@@ -36,7 +53,23 @@ Logon node2, then type the command to start the second node. (Again, replace the
      -e MYSQL_CLUSTER=join \
      mariadb-galera:10.0.21
 
+Again, wait couple seconds until the server is up. Type the command to check the server startup status
+
+    docker run --rm --name mariadb-client \
+     --entrypoint /bin/bash \
+     mariadb-galera:10.0.21 \
+     -c "mysql -h 10.58.9.244 --protocol=TCP -u root -P 3306 -p'12345' -e \"show status like 'wsrep_%'\""
+
+A successful result could contains the following entries. (Only part of the entries are listed here) 
+
+    wsrep_local_state_comment       Synced
+    wsrep_incoming_addresses        10.58.9.243:3306,10.58.9.244:3306
+    wsrep_cluster_size              2
+    wsrep_ready                     ON
+
 ## 5. Start node3 ##
+**Do not start node3 until you see a successful result from node2.**
+
 Logon node3, then type the command to start the third node
 
     docker run -d --name mariadb \
@@ -49,6 +82,20 @@ Logon node3, then type the command to start the third node
      -e MYSQL_CLUSTER=join \
      mariadb-galera:10.0.21
 
+Once more, wait couple seconds until the server is up. Type the command to check the server startup status
+
+    docker run --rm --name mariadb-client \
+     --entrypoint /bin/bash \
+     mariadb-galera:10.0.21 \
+     -c "mysql -h 10.58.9.245 --protocol=TCP -u root -P 3306 -p'12345' -e \"show status like 'wsrep_%'\""
+
+A successful result could contains the following entries. (Only part of the entries are listed here) 
+
+    wsrep_local_state_comment       Synced
+    wsrep_incoming_addresses        10.58.9.243:3306,10.58.9.244:3306,10.58.9.245:3306
+    wsrep_cluster_size              3
+    wsrep_ready                     ON
+
 ## 6. Test cluster ##
 Start mysql client, input password 12345
 
@@ -56,7 +103,7 @@ Start mysql client, input password 12345
      --entrypoint /bin/bash \
      mariadb-galera:10.0.21
 
-    mysql -h 10.58.9.243 --protocol=TCP -u root -P 3306 -p
+    mysql -h 10.58.9.243 --protocol=TCP -u root -P 3306 -p'12345'
 
 Show cluster status
 
@@ -113,7 +160,7 @@ You will have to decide which node might have the latest data that you want. The
      -e MYSQL_CLUSTER=new \
      mariadb-galera:10.0.21
 
-After which, go to the rest of the nodes, type the command to join the cluster
+After which, go to the rest of the nodes, type the command to join the cluster. **Make sure you start the slave node one by one after each node is fully up.**
 
     docker run -d --name mariadb \
      -p 3306:3306 -p 4567:4567 -p 4568:4568 -p 4444:4444 \
