@@ -6,8 +6,8 @@ FROM nodejs:4.0.0
 
 RUN \
     # http proxy
-    export http_proxy=http://proxy.pvgl.sap.corp:8080 &&\
-    export https_proxy=http://proxy.pvgl.sap.corp:8080 &&\
+    # export http_proxy=http://proxy.pvgl.sap.corp:8080 &&\
+    # export https_proxy=http://proxy.pvgl.sap.corp:8080 &&\
     # install http-server
     npm install -g http-server &&\
     # done
