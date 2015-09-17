@@ -1,10 +1,31 @@
 FROM debian:jessie
-# docker build --no-cache=true -t nodejs:0.12.7 .
+# docker build --no-cache=true -t nodejs:4.0.0 .
 #
-# docker run --rm --name node-playground -it nodejs:0.12.7 node
-# docker run -d --name node-hs -p 80:80 -v /path/to/web:/media:ro nodejs:0.12.7 hs -d false -p 80 /media
+# docker run --rm --name node-playground -it nodejs:4.0.0 node
+#
 
-ENV PATH=$PATH:/opt/nodejs/bin \
-    NODE_HOME=/opt/nodejs
+ENV PATH=$PATH:/opt/node-v4.0.0-linux-x64/bin \
+    NODE_HOME=/opt/node-v4.0.0-linux-x64/
 
-ADD nodejs.tar.xz /opt/
+RUN \
+    # http proxy
+    export http_proxy=http://proxy.pvgl.sap.corp:8080 &&\
+    export https_proxy=http://proxy.pvgl.sap.corp:8080 &&\
+    # add 163 mirror
+    { \
+        echo 'deb http://mirrors.163.com/debian/ jessie main non-free contrib'; \
+        echo 'deb http://mirrors.163.com/debian/ jessie-updates main non-free contrib'; \
+        echo 'deb http://mirrors.163.com/debian/ jessie-backports main non-free contrib'; \
+        echo 'deb http://mirrors.163.com/debian-security/ jessie/updates main non-free contrib'; \
+    } > /etc/apt/sources.list &&\
+    apt-get update &&\
+    apt-get install -y --force-yes curl &&\
+    apt-get clean autoclean &&\
+    rm -rf /var/lib/apt/lists/* &&\
+    rm -rf /var/log/* &&\
+    # download nodejs
+    curl -sLO https://nodejs.org/dist/v4.0.0/node-v4.0.0-linux-x64.tar.gz &&\
+    tar -xf /node-v4.0.0-linux-x64.tar.gz -C /opt/ &&\
+    rm /node-v4.0.0-linux-x64.tar.gz &&\
+    # done
+    echo 'done'
