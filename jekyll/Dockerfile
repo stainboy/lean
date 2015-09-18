@@ -1,7 +1,8 @@
 FROM ruby:2.2.3
 # docker build --no-cache=true -t jekyll:2.4.0 .
 #
-# docker run -d --privileged --name jekyll -p 4000:4000 -v ~/git/stainboy.github.io:/opt/web jekyll:2.4.0
+# docker run -d --privileged --name stainboy -p 80:4000 -v ~/git/stainboy.github.io:/opt/web jekyll:2.4.0
+# docker run -d --privileged --name pchou -p 81:4000 -v ~/git/pchou.github.io:/opt/web jekyll:2.4.0
 #
 ENV PATH=$PATH:/opt/node-v4.0.0-linux-x64/bin \
     NODE_HOME=/opt/node-v4.0.0-linux-x64/
