@@ -14,7 +14,7 @@ Refer ../mariadb-galera and ../rabbitmq to setup cluster.
     docker build --no-cache=true -t haproxy:1.5.14
 
 ## 3. Prepare haproxy.cfg ##
-Go to node4, prepare haproxy.cfg manually. You can edit the file based on src/_haproxy.cfg (Replace the IP address with your own)
+Go to node4, prepare haproxy.cfg manually. (Replace the IP address with your own)
 
     cat > ~/.haproxy.cfg << EOF
     global
@@ -79,7 +79,7 @@ Go to node4, prepare haproxy.cfg manually. You can edit the file based on src/_h
         stats admin if TRUE
     EOF
 
-## 3. Start haproxy ##
+## 4. Start haproxy ##
 Type the command to start haproxy.
 
     docker run -d --name haproxy \
@@ -87,7 +87,7 @@ Type the command to start haproxy.
      -v ~/.haproxy.cfg:/etc/haproxy/haproxy.cfg:ro \
      haproxy:1.5.14
 
-## 4. Test cluster ##
+## 5. Test cluster ##
 Open browser and goto http://10.58.9.246:9000, login as haproxy/12345. Check the haproxy status.
 
 Open browser and goto http://10.58.9.246:15672, login as admin/admin. Check the MQ status.
@@ -112,10 +112,10 @@ Show users
 
     mysql> select user from mysql.user;
 
-## 5. When cluster nodes changed ##
+## 6. When cluster nodes changed ##
 Edit ~/.haproxy.cfg and type command
 
     docker restart -t 0 haproxy
 
-## 6. When haproxy is dead ##
-Make sure ~/.haproxy.cfg is correct and redo step #3.
+## 7. When haproxy is dead ##
+Make sure ~/.haproxy.cfg is correct and redo step #4.
