@@ -1,4 +1,4 @@
-FROM ruby:2.2.3
+FROM daocloud.io/library/ruby
 # docker build --no-cache=true -t jekyll:2.4.0 .
 #
 # docker run -d --privileged --name stainboy -p 80:4000 -v ~/git/stainboy.github.io:/opt/web jekyll:2.4.0
@@ -9,8 +9,8 @@ ENV PATH=$PATH:/opt/node-v4.0.0-linux-x64/bin \
 
 RUN \
     # http proxy
-    export http_proxy=http://proxy.sin.sap.corp:8080 &&\
-    export https_proxy=http://proxy.sin.sap.corp:8080 &&\
+    # export http_proxy=http://proxy.sin.sap.corp:8080 &&\
+    # export https_proxy=http://proxy.sin.sap.corp:8080 &&\
     # download nodejs
     curl -sLO https://nodejs.org/dist/v4.0.0/node-v4.0.0-linux-x64.tar.gz &&\
     tar -xf /node-v4.0.0-linux-x64.tar.gz -C /opt/ &&\
