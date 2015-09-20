@@ -7,6 +7,8 @@
 - node2 (e.g. 10.58.9.244)
 - node3 (e.g. 10.58.9.245) 
 
+Make sure `hostname -i` shows the correct IP address of the node
+
 ## 2. Build the solution ##
     docker build --no-cache=true -t mariadb-galera:10.0.21
 
@@ -18,7 +20,7 @@ Logon node1, then type the command to start the first node. (Replace the IP addr
      -v /path/to/data:/var/lib/mysql \
      -e MYSQL_ROOT_PASSWORD=12345 \
      -e MYSQL_CLUSTER_PEER=10.58.9.243,10.58.9.244,10.58.9.245 \
-     -e MYSQL_CLUSTER_IP=10.58.9.243 \
+     -e MYSQL_CLUSTER_IP=`hostname -i` \
      -e MYSQL_CLUSTER_NAME=`hostname` \
      -e MYSQL_CLUSTER=new \
      mariadb-galera:10.0.21
@@ -28,7 +30,7 @@ Wait couple seconds until the server is up. Type the command to check the server
     docker run --rm --name mariadb-client \
      --entrypoint /bin/bash \
      mariadb-galera:10.0.21 \
-     -c "mysql -h 10.58.9.243 --protocol=TCP -u root -P 3306 -p'12345' -e \"show status like 'wsrep_%'\""
+     -c "mysql -h `hostname -i` --protocol=TCP -u root -P 3306 -p'12345' -e \"show status like 'wsrep_%'\""
 
 A successful result could contains the following entries. (Only part of the entries are listed here) 
 
@@ -48,7 +50,7 @@ Logon node2, then type the command to start the second node. (Again, replace the
      -v /path/to/data:/var/lib/mysql \
      -e MYSQL_ROOT_PASSWORD=12345 \
      -e MYSQL_CLUSTER_PEER=10.58.9.243,10.58.9.244,10.58.9.245 \
-     -e MYSQL_CLUSTER_IP=10.58.9.244 \
+     -e MYSQL_CLUSTER_IP=`hostname -i` \
      -e MYSQL_CLUSTER_NAME=`hostname` \
      -e MYSQL_CLUSTER=join \
      mariadb-galera:10.0.21
@@ -58,7 +60,7 @@ Again, wait couple seconds until the server is up. Type the command to check the
     docker run --rm --name mariadb-client \
      --entrypoint /bin/bash \
      mariadb-galera:10.0.21 \
-     -c "mysql -h 10.58.9.244 --protocol=TCP -u root -P 3306 -p'12345' -e \"show status like 'wsrep_%'\""
+     -c "mysql -h `hostname -i` --protocol=TCP -u root -P 3306 -p'12345' -e \"show status like 'wsrep_%'\""
 
 A successful result could contains the following entries. (Only part of the entries are listed here) 
 
@@ -77,7 +79,7 @@ Logon node3, then type the command to start the third node
      -v /path/to/data:/var/lib/mysql \
      -e MYSQL_ROOT_PASSWORD=12345 \
      -e MYSQL_CLUSTER_PEER=10.58.9.243,10.58.9.244,10.58.9.245 \
-     -e MYSQL_CLUSTER_IP=10.58.9.245 \
+     -e MYSQL_CLUSTER_IP=`hostname -i` \
      -e MYSQL_CLUSTER_NAME=`hostname` \
      -e MYSQL_CLUSTER=join \
      mariadb-galera:10.0.21
@@ -87,7 +89,7 @@ Once more, wait couple seconds until the server is up. Type the command to check
     docker run --rm --name mariadb-client \
      --entrypoint /bin/bash \
      mariadb-galera:10.0.21 \
-     -c "mysql -h 10.58.9.245 --protocol=TCP -u root -P 3306 -p'12345' -e \"show status like 'wsrep_%'\""
+     -c "mysql -h `hostname -i` --protocol=TCP -u root -P 3306 -p'12345' -e \"show status like 'wsrep_%'\""
 
 A successful result could contains the following entries. (Only part of the entries are listed here) 
 
@@ -142,7 +144,7 @@ Go to the dead node (**e.g. node1 - 10.58.9.243**), type the command to rejoin c
      -v /path/to/data:/var/lib/mysql \
      -e MYSQL_ROOT_PASSWORD=12345 \
      -e MYSQL_CLUSTER_PEER=10.58.9.243,10.58.9.244,10.58.9.245 \
-     -e MYSQL_CLUSTER_IP=10.58.9.243 \
+     -e MYSQL_CLUSTER_IP=`hostname -i` \
      -e MYSQL_CLUSTER_NAME=`hostname` \
      -e MYSQL_CLUSTER=join \
      mariadb-galera:10.0.21
@@ -155,7 +157,7 @@ You will have to decide which node might have the latest data that you want. The
      -v /path/to/data:/var/lib/mysql \
      -e MYSQL_ROOT_PASSWORD=12345 \
      -e MYSQL_CLUSTER_PEER=10.58.9.243,10.58.9.244,10.58.9.245 \
-     -e MYSQL_CLUSTER_IP=10.58.9.244 \
+     -e MYSQL_CLUSTER_IP=`hostname -i` \
      -e MYSQL_CLUSTER_NAME=`hostname` \
      -e MYSQL_CLUSTER=new \
      mariadb-galera:10.0.21
@@ -167,17 +169,7 @@ After which, go to the rest of the nodes, type the command to join the cluster. 
      -v /path/to/data:/var/lib/mysql \
      -e MYSQL_ROOT_PASSWORD=12345 \
      -e MYSQL_CLUSTER_PEER=10.58.9.243,10.58.9.244,10.58.9.245 \
-     -e MYSQL_CLUSTER_IP=10.58.9.243 \
-     -e MYSQL_CLUSTER_NAME=`hostname` \
-     -e MYSQL_CLUSTER=join \
-     mariadb-galera:10.0.21
-
-    docker run -d --name mariadb \
-     -p 3306:3306 -p 4567:4567 -p 4568:4568 -p 4444:4444 \
-     -v /path/to/data:/var/lib/mysql \
-     -e MYSQL_ROOT_PASSWORD=12345 \
-     -e MYSQL_CLUSTER_PEER=10.58.9.243,10.58.9.244,10.58.9.245 \
-     -e MYSQL_CLUSTER_IP=10.58.9.245 \
+     -e MYSQL_CLUSTER_IP=`hostname -i` \
      -e MYSQL_CLUSTER_NAME=`hostname` \
      -e MYSQL_CLUSTER=join \
      mariadb-galera:10.0.21
