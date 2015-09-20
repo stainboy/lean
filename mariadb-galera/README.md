@@ -12,7 +12,7 @@ Make sure `hostname -i` shows the correct IP address of the node
 ## 2. Build the solution ##
     docker build --no-cache=true -t mariadb-galera:10.0.21
 
-## 3. Start node1 (aks master) ##
+## 3. Start node1 (aka master) ##
 Logon node1, then type the command to start the first node. (Replace the IP address with your own)
 
     docker run -d --name mariadb \
