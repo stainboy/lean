@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-if [ ! -f node-v4.0.0-linux-x64.tar.gz ]; then
-    curl -LO https://nodejs.org/dist/v4.0.0/node-v4.0.0-linux-x64.tar.gz
+if [ ! -f node-v4.1.1-linux-x64.tar.gz ]; then
+    curl -LO https://nodejs.org/dist/v4.1.1/node-v4.1.1-linux-x64.tar.gz
 fi
-docker build --no-cache=true -t nodejs:4.0.0 .
+docker build --no-cache=true -t nodejs:4.1.1 .

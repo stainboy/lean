@@ -1,4 +1,4 @@
-FROM nodejs:4.0.0
+FROM nodejs:4.1.1
 # docker build --no-cache=true -t nodejs-hs:0.8.0 .
 #
 # docker run -d --name nodejs-hs -p 80:8080 -v /path/to/web:/opt/web:ro nodejs-hs:0.8.0
