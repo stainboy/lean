@@ -9,8 +9,8 @@ RUN \
     export DEBIAN_FRONTEND=noninteractive &&\
     # install
     { \
-        # echo 'deb http://mirrors.163.com/debian/ jessie main'; \
-        echo 'deb http://10.58.9.159/debian jessie main'; \
+        echo 'deb http://mirrors.163.com/debian/ jessie main'; \
+        # echo 'deb http://10.58.9.159/debian jessie main'; \
     } > /etc/apt/sources.list &&\
     apt-get update &&\
     apt-get install -y --force-yes samba &&\
