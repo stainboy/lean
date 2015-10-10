@@ -13,7 +13,9 @@ RUN \
         echo 'deb http://10.58.9.159/debian jessie main'; \
     } > /etc/apt/sources.list &&\
     apt-get update &&\
-    apt-get install -y --force-yes corkscrew openssh-client net-tools &&\
+    apt-get install -y --force-yes corkscrew openssh-client &&\
+    # debug network
+    # apt-get install -y --force-yes net-tools &&\
     apt-get clean autoclean &&\
     rm -rf /var/lib/apt/lists/* &&\
     rm -rf /var/log/* &&\
