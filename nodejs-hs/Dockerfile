@@ -1,8 +1,10 @@
-FROM nodejs:4.2.1
+FROM nodejs:4.2.2
 # docker build --no-cache=true -t nodejs-hs:0.8.0 .
 #
-# docker run -d --name nodejs-hs -p 80:8080 -v /path/to/web:/opt/web:ro nodejs-hs:0.8.0
+# docker run -d --name nodejs-hs -p 443:443 -v /path/to/web:/opt/web nodejs-hs:0.8.0
 #
+
+ADD *.pem /etc/cert/
 
 RUN \
     # http proxy
@@ -13,4 +15,5 @@ RUN \
     # done
     echo 'done'
 
-ENTRYPOINT ["hs", "/opt/web"]
+ENTRYPOINT ["hs", "-p", "443", "-S", "-C", "/etc/cert/pvgl.sap.corp.pem", "-K", "/etc/cert/key.pem", "/opt/web"]
+# EXPOSE 443 80

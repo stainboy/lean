@@ -1,7 +1,6 @@
 FROM jre:8u60
 
-ADD jenkins.war docker-engine_1.8.1-0~jessie_amd64.deb /opt/
-ADD fin.pem /root/.ssh/id_rsa
+ADD * /opt/
 
 # Install git, docker
 RUN \
@@ -21,10 +20,14 @@ RUN \
     rm -rf /var/lib/apt/lists/* &&\
     rm -rf /var/log/* &&\
     #
-    dpkg -i /opt/docker-engine_1.8.1-0~jessie_amd64.deb &&\
-    rm /opt/docker-engine_1.8.1-0~jessie_amd64.deb &&\
-    # docker version &&\
+    dpkg -i /opt/docker-engine_jessie_amd64.deb &&\
+    rm /opt/docker-engine_jessie_amd64.deb &&\
     #
+    unlink /etc/localtime &&\
+    ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime &&\
+    #
+    mkdir /root/.ssh &&\
+    mv /opt/fin.pem /root/.ssh/id_rsa &&\
     chmod 400 /root/.ssh/id_rsa &&\
     echo 'StrictHostKeyChecking no' >> /etc/ssh/ssh_config &&\
     # done
