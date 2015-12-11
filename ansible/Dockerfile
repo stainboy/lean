@@ -17,6 +17,11 @@ RUN \
     rm -rf /var/log/* &&\
     # symbolic link
     pip install httplib2 ansible && \
+    # disable host key checking
+    { \
+        echo '[defaults]'; \
+        echo 'host_key_checking = False'; \
+    } > ~/.ansible.cfg &&\
     # done
     echo 'done'
 
