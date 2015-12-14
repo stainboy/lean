@@ -13,3 +13,7 @@ https://apt.dockerproject.org/repo/dists/debian-jessie/main/
 https://apt.dockerproject.org/repo/pool/main/d/docker-engine/
 https://apt.dockerproject.org/repo/pool/main/d/docker-engine/docker-engine_1.8.3-0~jessie_amd64.deb
 https://apt.dockerproject.org/repo/pool/main/d/docker-engine/docker-engine_1.9.0-0~jessie_amd64.deb
+
+# docker universal binary
+https://docs.docker.com/engine/installation/binaries/#get-the-linux-binary
+https://get.docker.com/builds/Linux/x86_64/docker-1.8.3
