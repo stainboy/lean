@@ -2,15 +2,15 @@
 
 ##Build the Dockerfile
 
-    docker build --no-cache=true -t hyper.cd/core/registry:2.2.0 .
+    docker build --no-cache=true -t hyper.cd/core/registry-insecure:2.2.0 .
 
 ##Run the Registry
 
     mkdir ~/.registry
     docker run -d --name registry \
-     -p 443:443 \
+     -p 5000:5000 \
      -v ~/.registry:/var/lib/registry \
-     hyper.cd/core/registry:2.2.0
+     hyper.cd/core/registry-insecure:2.2.0
 
 
 ##References
