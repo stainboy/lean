@@ -1,0 +1,1 @@
+    docker build --no-cache=true -t hyper.cd/core/sapjre:8.1.014 .

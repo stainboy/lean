@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+set -e
+
+dest=$(readlink -f $1)
+target=$(basename $dest)
+
+echo "building docker image from $dest/, target=$target"
+echo "staring http-server on $dest/, name=hs-$target"
+
+docker rm -f hs-$target || true
+docker run -d --name hs-$target \
+ -p 8000:80 \
+ -v $dest:/opt/web \
+ hyper.cd/core/nodejs-hs-insecure:0.8.0
+
+echo "building ..."
+
+docker build --no-cache=true -t $(cat $dest/tag) $dest
+docker rm -f hs-$target
+
+echo "done"
