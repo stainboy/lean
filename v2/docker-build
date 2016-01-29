@@ -11,7 +11,7 @@ docker rm -f hs-$target || true
 docker run -d --name hs-$target \
  -p 8000:80 \
  -v $dest:/opt/web \
- hyper.cd/core/nodejs-hs-insecure:0.8.0
+ hyper.cd/core/nodejs-hs:0.8.0
 
 echo "building ..."
 
